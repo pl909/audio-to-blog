@@ -11,7 +11,6 @@ from aiobotocore.session import get_session
 app = FastAPI()
 templates = Jinja2Templates(directory='templates')
 
-# Your existing code follows
 
 S3_BUCKET = 'transcribe-ids721'
 session = get_session()
@@ -47,7 +46,7 @@ async def process_file(filename: str):
     if filename:
         process_id = str(uuid.uuid4())
         data = {
-            "input": f"s3://{S3_BUCKET}/{filename}",
+            "input": "{\"filename\": \"" + f"s3://{S3_BUCKET}/" + filename + "\"}",
             "name": "Execution-" + process_id,
             "stateMachineArn": "arn:aws:states:us-east-1:718203338152:stateMachine:transcribe"
         }
