@@ -73,7 +73,7 @@ async def process_file(filename: str):
         print(f"Failed to start process, status code: {response.status_code}, message: {response.text}")
         raise HTTPException(status_code=500, detail="Failed to start processing")
 
-    return {"message": "Processing started", "processId": process_id, "response": response}
+    return {"message": "Processing started", "processId": process_id}
 
 
 
