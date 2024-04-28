@@ -33,11 +33,13 @@ async def upload_file(file: UploadFile = File(...)):
     if file:
         async with client as s3:
             try:
-                await s3.upload_fileobj(
-                    file.file,
-                    S3_BUCKET,
-                    filename,
-                    ExtraArgs={"ContentType": file.content_type}
+                # Reading the content of the file
+                file_content = await file.read()
+                await s3.put_object(
+                    Bucket=S3_BUCKET,
+                    Key=filename,
+                    Body=file_content,
+                    ContentType=file.content_type
                 )
                 print(f"File uploaded: {filename}")
                 return JSONResponse(status_code=200, content={"message": "File uploaded successfully", "filename": filename})
