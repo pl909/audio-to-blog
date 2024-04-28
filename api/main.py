@@ -49,7 +49,7 @@ async def upload_file(file: UploadFile = File(...)):
     raise HTTPException(status_code=400, detail="Failed to upload file")
 
 
-@app.post("/process")
+@app.post("/process/{filename}")
 async def process_file(filename: str):
     print("Entered /process :D")
     if not filename:

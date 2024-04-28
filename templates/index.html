@@ -72,10 +72,9 @@
                 .then(data => {
                     console.log("got to data->")
                     if (data.filename) {
-                        return fetch('/process', {
+                        return fetch(`/process/${data.filename}`, {
                             method: 'POST',
                             headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({ filename: data.filename })
                         });
                     } else {
                         throw new Error(data.error || 'Unknown error');
