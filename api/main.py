@@ -62,7 +62,7 @@ async def process_file(filename: str):
     processing_status[process_id] = {"complete": False, "result": None}
     data = {
         "input": "{\"filename\": \"" + f"s3://{S3_BUCKET}/" + filename + "\"}",
-        "id": process_id,
+        "processId": process_id,
         "stateMachineArn": "arn:aws:states:us-east-1:718203338152:stateMachine:transcribe"
     }
     headers = {'Content-Type': 'application/json'}
