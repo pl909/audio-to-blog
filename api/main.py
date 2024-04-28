@@ -66,3 +66,18 @@ async def process_file(filename: str):
         else:
             return JSONResponse(status_code=400, content={"error": "Error initiating processing"})
     raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Filename is missing")
+
+
+@app.post("/callback")
+async def callback(data: dict):
+    process_id = data.get('name')
+    if process_id in processing_status:
+        processing_status[process_id] = {"complete": True, "result": data}
+    return {"status": "success", "data": data}
+
+@app.get("/status")
+async def check_status(processId: str):
+    if processId in processing_status and processing_status[processId]['complete']:
+        return {"complete": True, "result": processing_status[processId]['result']}
+    else:
+        return {"complete": False}
