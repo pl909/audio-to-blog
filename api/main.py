@@ -53,6 +53,7 @@ async def upload_file(file: UploadFile = File(...)):
 async def process_file(filename: str):
     if filename:
         process_id = str(uuid.uuid4())
+        processing_status[process_id] = {"complete": False, "result": None}
         data = {
             "input": "{\"filename\": \"" + f"s3://{S3_BUCKET}/" + filename + "\"}",
             "name": "Execution-" + process_id,
@@ -60,11 +61,8 @@ async def process_file(filename: str):
         }
         headers = {'Content-Type': 'application/json'}
         url = 'https://wrnqr49qhe.execute-api.us-east-1.amazonaws.com/beta/execution'
-        response = requests.post(url, json=data, headers=headers)
-        if response.status_code == 200:
-            return JSONResponse(status_code=200, content={"message": "Processing started", "processId": process_id})
-        else:
-            return JSONResponse(status_code=400, content={"error": "Error initiating processing"})
+        requests.post(url, json=data, headers=headers)
+        return {"message": "Processing started", "processId": process_id}
     raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Filename is missing")
 
 
