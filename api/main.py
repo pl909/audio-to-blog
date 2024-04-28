@@ -51,6 +51,7 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.post("/process")
 async def process_file(filename: str):
+    print("Entered /process :D")
     if not filename:
         raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Filename is missing")
     
