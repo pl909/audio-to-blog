@@ -76,9 +76,8 @@ async def process_file(filename: str):
     return {"message": "Processing started", "processId": process_id}
 
 
-
 @app.post("/callback")
-async def callback(process_id: str, text_result: Annotated[str, Body()]):
+async def callback(process_id: str, text_result: Annotated[int, Body()]):
     if process_id in processing_status:
         processing_status[process_id] = {"complete": True, "result": text_result}
     return {"status": "success", "data": text_result}
