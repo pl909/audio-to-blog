@@ -68,12 +68,12 @@ async def process_file(filename: str):
     headers = {'Content-Type': 'application/json'}
     url = 'https://wrnqr49qhe.execute-api.us-east-1.amazonaws.com/beta/execution'
     response = requests.post(url, json=data, headers=headers)
-    
+    print(response.)
     if response.status_code != 200:
         print(f"Failed to start process, status code: {response.status_code}, message: {response.text}")
         raise HTTPException(status_code=500, detail="Failed to start processing")
 
-    return {"message": "Processing started", "processId": process_id}
+    return {"message": "Processing started", "processId": process_id, "response": response}
 
 
 
