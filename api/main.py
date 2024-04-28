@@ -61,7 +61,7 @@ async def process_file(filename: str):
     processing_status[process_id] = {"complete": False, "result": None}
     data = {
         "input": "{\"filename\": \"" + f"s3://{S3_BUCKET}/" + filename + "\"}",
-        "name": "Execution-" + process_id,
+        "id": process_id,
         "stateMachineArn": "arn:aws:states:us-east-1:718203338152:stateMachine:transcribe"
     }
     headers = {'Content-Type': 'application/json'}
@@ -76,9 +76,9 @@ async def process_file(filename: str):
 
 
 
-@app.post("/callback")
-async def callback(data: dict):
-    process_id = data.get('name')
+@app.post("/callback/{id}")
+async def callback(id: str, data: dict):
+    process_id = data.get('id')
     if process_id in processing_status:
         processing_status[process_id] = {"complete": True, "result": data}
     return {"status": "success", "data": data}
