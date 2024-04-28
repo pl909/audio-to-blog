@@ -1,5 +1,6 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException, Request
+from typing import Annotated
 from fastapi.responses import JSONResponse
+from fastapi import Body, FastAPI, File, UploadFile, HTTPException, Request
 from fastapi.templating import Jinja2Templates
 from starlette.staticfiles import StaticFiles
 from starlette.status import HTTP_400_BAD_REQUEST
@@ -76,16 +77,15 @@ async def process_file(filename: str):
 
 
 
-@app.post("/callback/{id}")
-async def callback(id: str, data: dict):
-    process_id = data.get('id')
+@app.post("/callback")
+async def callback(process_id: str, text_result: Annotated[str, Body()]):
     if process_id in processing_status:
-        processing_status[process_id] = {"complete": True, "result": data}
-    return {"status": "success", "data": data}
+        processing_status[process_id] = {"complete": True, "result": text_result}
+    return {"status": "success", "data": text_result}
 
 @app.get("/status")
-async def check_status(processId: str):
-    if processId in processing_status and processing_status[processId]['complete']:
-        return {"complete": True, "result": processing_status[processId]['result']}
+async def check_status(process_id: str):
+    if process_id in processing_status and processing_status[process_id]['complete']:
+        return {"complete": True, "result": processing_status[process_id]['result']}
     else:
         return {"complete": False}

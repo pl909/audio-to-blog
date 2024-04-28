@@ -96,7 +96,7 @@
         
         function startPolling(processId) {
             const intervalId = setInterval(() => {
-                fetch(`/status?processId=${processId}`)
+                fetch(`/status?process_id=${processId}`)
                     .then(response => response.json())
                     .then(data => {
                         if (data.complete) {
