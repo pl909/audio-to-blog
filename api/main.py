@@ -66,9 +66,9 @@ async def process_file(filename: str):
     url = 'https://wrnqr49qhe.execute-api.us-east-1.amazonaws.com/beta/execution'
     response = requests.post(url, json=data, headers=headers)
 
-    process_id = response.json().get("executionArn").split("-")[-1]
+    process_id = response.json().get("executionArn").split(":")[-1]
     processing_status[process_id] = {"complete": False, "result": None}
-
+    print(f"Started executing job ")
     print(f"Started process id {process_id}")
     if response.status_code != 200:
         print(f"Failed to start process, status code: {response.status_code}, message: {response.text}")
