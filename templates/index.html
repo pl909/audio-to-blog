@@ -102,7 +102,7 @@
                     .then(data => {
                         if (data.complete) {
                             clearInterval(intervalId);
-                            document.getElementById('result').textContent = 'Result: ' + marked.parse(JSON.stringify(data.result));
+                            document.getElementById('result').innerHTML = 'Result: ' + marked.parse(JSON.stringify(data.result));
                             document.getElementById('result').classList.add('alert-success');
                             document.getElementById('result').style.display = 'block';
                             document.getElementById('loading').style.display = 'none';
