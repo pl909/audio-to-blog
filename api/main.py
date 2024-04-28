@@ -25,22 +25,27 @@ async def s3_client():
 @app.get("/")
 async def read_index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
-
+    
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
     client = await s3_client()
+    filename = file.filename
     if file:
-        filename = file.filename
         async with client as s3:
-            await s3.upload_fileobj(
-                file.file, 
-                S3_BUCKET, 
-                filename, 
-                ExtraArgs={"ContentType": file.content_type}
-            )
-        print(f"file uploaded: {filename}")
-        return JSONResponse(status_code=200, content={"message": "File uploaded successfully", "filename": filename})
-    raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Failed to upload file")
+            try:
+                await s3.upload_fileobj(
+                    file.file,
+                    S3_BUCKET,
+                    filename,
+                    ExtraArgs={"ContentType": file.content_type}
+                )
+                print(f"File uploaded: {filename}")
+                return JSONResponse(status_code=200, content={"message": "File uploaded successfully", "filename": filename})
+            except Exception as e:
+                print(f"Upload failed: {e}")
+                return JSONResponse(status_code=500, content={"error": str(e)})
+    raise HTTPException(status_code=400, detail="Failed to upload file")
+
 
 @app.post("/process")
 async def process_file(filename: str):
