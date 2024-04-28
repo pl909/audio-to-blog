@@ -14,6 +14,7 @@ templates = Jinja2Templates(directory='templates')
 
 S3_BUCKET = 'transcribe-ids721'
 session = get_session()
+processing_status = {}
 
 async def s3_client():
     return session.create_client(
