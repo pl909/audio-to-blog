@@ -51,6 +51,8 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.post("/process")
 async def process_file(filename: str):
+
+    print(f "filename:" {filename})
     if filename:
         process_id = str(uuid.uuid4())
         processing_status[process_id] = {"complete": False, "result": None}
