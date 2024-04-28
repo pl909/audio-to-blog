@@ -9,7 +9,6 @@ import requests
 from aiobotocore.session import get_session
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="public"), name="static")
 templates = Jinja2Templates(directory='templates')
 
 # Your existing code follows
