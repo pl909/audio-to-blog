@@ -58,22 +58,23 @@ async def process_file(filename: str):
         raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Filename is missing")
     
     print(f"filename: {filename}")
-    process_id = str(uuid.uuid4())
-    processing_status[process_id] = {"complete": False, "result": None}
     data = {
         "input": "{\"filename\": \"" + f"s3://{S3_BUCKET}/" + filename + "\"}",
-        "processId": process_id,
         "stateMachineArn": "arn:aws:states:us-east-1:718203338152:stateMachine:transcribe"
     }
     headers = {'Content-Type': 'application/json'}
     url = 'https://wrnqr49qhe.execute-api.us-east-1.amazonaws.com/beta/execution'
     response = requests.post(url, json=data, headers=headers)
-    print(response.json())
+
+    process_id = response.json().then((data) => data.executionArn.split("-")[-1])
+    processing_status[process_id] = {"complete": False, "result": None}
+
+
     if response.status_code != 200:
         print(f"Failed to start process, status code: {response.status_code}, message: {response.text}")
         raise HTTPException(status_code=500, detail="Failed to start processing")
 
-    return {"message": "Processing started", "processId": process_id}
+    return {"message": "Processing started", "process_id": process_id}
 
 
 @app.post("/callback")
