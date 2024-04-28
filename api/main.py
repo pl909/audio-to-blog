@@ -69,7 +69,7 @@ async def process_file(filename: str):
     process_id = response.json().then((data) => data.executionArn.split("-")[-1])
     processing_status[process_id] = {"complete": False, "result": None}
 
-
+    print(f"Started process id {process_id}")
     if response.status_code != 200:
         print(f"Failed to start process, status code: {response.status_code}, message: {response.text}")
         raise HTTPException(status_code=500, detail="Failed to start processing")
