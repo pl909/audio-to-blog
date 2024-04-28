@@ -38,6 +38,7 @@ async def upload_file(file: UploadFile = File(...)):
                 filename, 
                 ExtraArgs={"ContentType": file.content_type}
             )
+        print(f"file uploaded: {filename}")
         return JSONResponse(status_code=200, content={"message": "File uploaded successfully", "filename": filename})
     raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Failed to upload file")
 
